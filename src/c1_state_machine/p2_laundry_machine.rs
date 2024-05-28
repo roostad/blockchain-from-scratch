@@ -24,6 +24,7 @@ pub enum ClothesState {
 }
 
 /// Something you can do with clothes
+#[allow(dead_code)]
 pub enum ClothesAction {
     /// Wearing clothes decreases their life by 1 and makes them dirty.
     Wear,
@@ -40,7 +41,67 @@ impl StateMachine for ClothesMachine {
     type Transition = ClothesAction;
 
     fn next_state(starting_state: &ClothesState, t: &ClothesAction) -> ClothesState {
-        todo!("Exercise 3")
+        fn reduce_life(life: u64) -> u64 {
+            life - 1
+        }
+
+        match starting_state {
+            ClothesState::Tattered => ClothesState::Tattered,
+            ClothesState::Clean(life) | ClothesState::Dirty(life) | ClothesState::Wet(life) => {
+                if *life <= 1 {
+                    return ClothesState::Tattered;
+                }
+                let new_life = reduce_life(*life);
+                match t {
+                    ClothesAction::Wear => ClothesState::Dirty(new_life),
+                    ClothesAction::Wash => ClothesState::Wet(new_life),
+                    ClothesAction::Dry => match starting_state {
+                        ClothesState::Clean(_) | ClothesState::Wet(_) => ClothesState::Clean(new_life),
+                        ClothesState::Dirty(_) => ClothesState::Dirty(new_life),
+                        _ => unreachable!(),
+                    },
+                }
+            }
+        }
+
+
+        // PREVIOUS VERSION
+        // match starting_state {
+        //     ClothesState::Clean(life) | ClothesState::Dirty(life) | ClothesState::Wet(life) => {
+        //         if life - 1 < 1 {
+        //             return ClothesState::Tattered;
+        //         }
+        //     }
+        //     ClothesState::Tattered => {return ClothesState::Tattered;}
+        // } 
+
+        // match t {
+        //     ClothesAction::Wear => {
+        //         match starting_state {
+        //             ClothesState::Clean(life) => ClothesState::Dirty(life - 1),
+        //             ClothesState::Dirty(life) => ClothesState::Dirty(life - 1),
+        //             ClothesState::Wet(life)=> ClothesState::Dirty(life - 1),
+        //             ClothesState::Tattered => ClothesState::Tattered,
+        //         }
+        //     },
+        //     ClothesAction::Wash => {
+        //         match starting_state {
+        //             ClothesState::Clean(life) => ClothesState::Wet(life - 1),
+        //             ClothesState::Dirty(life) => ClothesState::Wet(life - 1),
+        //             ClothesState::Wet(life)=> ClothesState::Wet(life - 1),
+        //             ClothesState::Tattered => ClothesState::Tattered,
+        //         }
+        //     },
+        //     ClothesAction::Dry => {
+        //         match starting_state {
+        //             ClothesState::Clean(life) => ClothesState::Clean(life - 1),
+        //             ClothesState::Dirty(life) => ClothesState::Dirty(life - 1),
+        //             ClothesState::Wet(life)=> ClothesState::Clean(life - 1),
+        //             ClothesState::Tattered => ClothesState::Tattered,
+        //         }
+        //     },
+        // }
+
     }
 }
 

@@ -6,6 +6,7 @@ use super::StateMachine;
 
 /// The keys on the ATM keypad
 #[derive(Hash, Debug, PartialEq, Eq, Clone)]
+#[allow(dead_code)]
 pub enum Key {
     One,
     Two,
@@ -15,6 +16,7 @@ pub enum Key {
 }
 
 /// Something you can do to the ATM
+#[allow(dead_code)]
 pub enum Action {
     /// Swipe your card at the ATM. The attached value is the hash of the pin
     /// that should be keyed in on the keypad next.
@@ -25,6 +27,7 @@ pub enum Action {
 
 /// The various states of authentication possible with the ATM
 #[derive(Debug, PartialEq, Eq, Clone)]
+#[allow(dead_code)]
 enum Auth {
     /// No session has begun yet. Waiting for the user to swipe their card
     Waiting,

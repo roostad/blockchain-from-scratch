@@ -3,6 +3,8 @@
 //! start with that.
 //!
 
+use std::default;
+
 use crate::hash;
 
 // We will use Rust's built-in hashing where the output type is u64. I'll make an alias
@@ -25,12 +27,18 @@ pub struct Header {
 impl Header {
     /// Returns a new valid genesis header.
     fn genesis() -> Self {
-        todo!("Exercise 1")
+        Self {
+            parent: hash(&0),
+            height: 1,
+            extrinsics_root: (),
+            state_root: (),
+            consensus_digest: ()
+        }
     }
 
     /// Create and return a valid child header.
     fn child(&self) -> Self {
-        todo!("Exercise 2")
+        Self { parent: hash(&1), height: 2, extrinsics_root: (), state_root: (), consensus_digest: () }
     }
 
     /// Verify that all the given headers form a valid chain from this header to the tip.
