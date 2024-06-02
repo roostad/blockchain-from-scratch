@@ -31,12 +31,24 @@ pub struct Header {
 impl Header {
     /// Returns a new valid genesis header.
     fn genesis() -> Self {
-        Self { parent: 0, height: 0, extrinsic: 0, state: 0, consensus_digest: () }
+        Self {
+            parent: 0,
+            height: 0,
+            extrinsic: 0,
+            state: 0,
+            consensus_digest: (),
+        }
     }
 
     /// Create and return a valid child header.
     fn child(&self, extrinsic: u64) -> Self {
-        Self { parent: hash(self), height: self.height + 1, extrinsic, state: self.state + extrinsic, consensus_digest: () }
+        Self {
+            parent: hash(self),
+            height: self.height + 1,
+            extrinsic,
+            state: self.state + extrinsic,
+            consensus_digest: (),
+        }
     }
 
     /// Verify that all the given headers form a valid chain from this header to the tip.
@@ -77,7 +89,6 @@ fn build_valid_chain(n: u64) -> Vec<Header> {
     let g = Header::genesis();
 
     let mut chain = Vec::new();
-
 
     let mut prev_block = g;
     let mut next_block;
@@ -132,8 +143,10 @@ fn build_forked_chain() -> (Vec<Header>, Vec<Header>) {
     let b3_prime = b2.child(7);
     let b4_prime = b3_prime.child(3);
 
-    (vec![g.clone(), b1.clone(), b2.clone(), b3, b4], vec![g, b1, b2, b3_prime, b4_prime])
-
+    (
+        vec![g.clone(), b1.clone(), b2.clone(), b3, b4],
+        vec![g, b1, b2, b3_prime, b4_prime],
+    )
 
     // Exercise 7: After you have completed this task, look at how its test is written below.
     // There is a critical thinking question for you there.

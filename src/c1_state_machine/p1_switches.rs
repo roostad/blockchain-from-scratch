@@ -48,20 +48,19 @@ impl StateMachine for WeirdSwitchMachine {
                 if !starting_state.first_switch == false {
                     return TwoSwitches {
                         first_switch: false,
-                        second_switch: false
+                        second_switch: false,
                     };
                 }
                 TwoSwitches {
                     first_switch: !starting_state.first_switch,
-                    second_switch: starting_state.second_switch
+                    second_switch: starting_state.second_switch,
                 }
             }
-            Toggle::SecondSwitch=> TwoSwitches {
-                    first_switch: starting_state.first_switch,
-                    second_switch: !starting_state.second_switch
-            }
+            Toggle::SecondSwitch => TwoSwitches {
+                first_switch: starting_state.first_switch,
+                second_switch: !starting_state.second_switch,
+            },
         }
-
     }
 }
 

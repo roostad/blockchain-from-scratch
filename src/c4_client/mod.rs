@@ -40,17 +40,16 @@ type Hash = u64;
 ///
 /// As you work through the sections in this chapter, you will add features to the client
 /// by implementing more and more methods on it.
-/// 
+///
 /// In practice the trait bounds here will always be the same:
 /// C: Client
 /// SM: StateMachine
 /// FC: ForkChoice<C>
 /// P: TransactionPool<SM>
-/// 
+///
 /// But we leave them unconstrained here to avoid repeating many where clauses throughout the section.
 /// Instead we bind them on impl blocks.
-pub struct FullClient<C, SM, FC, P>
-{
+pub struct FullClient<C, SM, FC, P> {
     /// The consensus engine used by this client.
     consensus_engine: C,
     /// The state machine used by this client.
@@ -59,7 +58,6 @@ pub struct FullClient<C, SM, FC, P>
     fork_choice: FC,
     /// The transaction pool used by this client.
     transaction_pool: P,
-
     // TODO: You are free to add more fields here, and you will probably need to.
     // Please document them as you add them.
 }

@@ -56,14 +56,15 @@ impl StateMachine for ClothesMachine {
                     ClothesAction::Wear => ClothesState::Dirty(new_life),
                     ClothesAction::Wash => ClothesState::Wet(new_life),
                     ClothesAction::Dry => match starting_state {
-                        ClothesState::Clean(_) | ClothesState::Wet(_) => ClothesState::Clean(new_life),
+                        ClothesState::Clean(_) | ClothesState::Wet(_) => {
+                            ClothesState::Clean(new_life)
+                        }
                         ClothesState::Dirty(_) => ClothesState::Dirty(new_life),
                         _ => unreachable!(),
                     },
                 }
             }
         }
-
 
         // PREVIOUS VERSION
         // match starting_state {
@@ -73,7 +74,7 @@ impl StateMachine for ClothesMachine {
         //         }
         //     }
         //     ClothesState::Tattered => {return ClothesState::Tattered;}
-        // } 
+        // }
 
         // match t {
         //     ClothesAction::Wear => {
@@ -101,7 +102,6 @@ impl StateMachine for ClothesMachine {
         //         }
         //     },
         // }
-
     }
 }
 

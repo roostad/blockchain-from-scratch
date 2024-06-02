@@ -29,6 +29,7 @@ pub struct State {
     /// The next serial number to use when a bill is created.
     next_serial: u64,
 }
+// haha
 
 impl State {
     pub fn new() -> Self {
@@ -98,9 +99,13 @@ impl StateMachine for DigitalCashSystem {
             // mint_new_cash
             CashTransaction::Mint { minter, amount } => {
                 let mut bills = starting_state.bills.clone();
-                bills.insert(Bill { owner: *minter, amount: *amount, serial: starting_state.next_serial });
+                bills.insert(Bill {
+                    owner: *minter,
+                    amount: *amount,
+                    serial: starting_state.next_serial,
+                });
                 return Self::State::from_iter(bills.into_iter());
-            },
+            }
             CashTransaction::Transfer { spends, receives } => {
                 let bills = starting_state.bills.clone();
                 // empty_spend_fails
@@ -119,12 +124,11 @@ impl StateMachine for DigitalCashSystem {
                         }
                     }
 
-                    
                     // overflow_receives_fails
                     let entry = sums_receive.entry(bill.clone().owner).or_insert(0);
                     *entry = match entry.checked_add(bill.amount) {
                         Some(amt) => amt,
-                        None => return starting_state.clone()
+                        None => return starting_state.clone(),
                     };
                     // output_value_0_fails
                     if bill.amount == 0 {
@@ -136,11 +140,8 @@ impl StateMachine for DigitalCashSystem {
                     if let Some(_) = bills.iter().find(|&b| b.serial == bill.serial) {
                         return starting_state.clone();
                     }
-                    
-
-
                 }
-                
+
                 // spending_more_than_bill_fails
                 let mut sums_current: HashMap<User, u64> = HashMap::new();
                 for bill in bills.clone() {
@@ -158,7 +159,7 @@ impl StateMachine for DigitalCashSystem {
                         }
                     }
                 }
-                
+
                 for (i, bill) in spends.iter().enumerate() {
                     // spending_same_bill_fails
                     if spends.iter().filter(|&b| b == bill).count() > 1 {
@@ -171,7 +172,6 @@ impl StateMachine for DigitalCashSystem {
                     }
                 }
 
-
                 let mut sums_spends: HashMap<User, u64> = HashMap::new();
                 let mut serials = Vec::new();
                 for bill in spends {
@@ -180,7 +180,6 @@ impl StateMachine for DigitalCashSystem {
                 }
 
                 let mut new_state = starting_state.clone();
-                // Remove spent bills
                 for bill in spends {
                     if !new_state.bills.remove(bill) {
                         // spending_non_existent_bill_fails
@@ -188,17 +187,13 @@ impl StateMachine for DigitalCashSystem {
                     }
                 }
 
-                // Add received bills and increment serials
                 for bill in receives {
                     new_state.add_bill(bill.clone());
                 }
 
                 new_state
-
-
             }
         }
-        
     }
 }
 

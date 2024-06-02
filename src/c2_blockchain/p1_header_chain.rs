@@ -32,13 +32,19 @@ impl Header {
             height: 0,
             extrinsics_root: (),
             state_root: (),
-            consensus_digest: ()
+            consensus_digest: (),
         }
     }
 
     /// Create and return a valid child header.
     fn child(&self) -> Self {
-        Self { parent: hash(self), height: self.height + 1, extrinsics_root: (), state_root: (), consensus_digest: () }
+        Self {
+            parent: hash(self),
+            height: self.height + 1,
+            extrinsics_root: (),
+            state_root: (),
+            consensus_digest: (),
+        }
     }
 
     /// Verify that all the given headers form a valid chain from this header to the tip.
@@ -59,7 +65,7 @@ impl Header {
         }
 
         // Recursion
-        let rest_of_chain = & chain[1..];
+        let rest_of_chain = &chain[1..];
         child.verify_sub_chain(rest_of_chain)
     }
 }
@@ -71,7 +77,6 @@ fn build_valid_chain_length_5() -> Vec<Header> {
     let g = Header::genesis();
 
     let mut chain = Vec::new();
-
 
     let mut prev_block = g;
     let mut next_block;

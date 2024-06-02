@@ -30,7 +30,7 @@ pub trait ImportBlock<C: Consensus, SM: StateMachine> {
 }
 
 impl<C, SM, FC, P> ImportBlock<C, SM> for FullClient<C, SM, FC, P>
-    where
+where
     C: Consensus,
     SM: StateMachine,
 {
